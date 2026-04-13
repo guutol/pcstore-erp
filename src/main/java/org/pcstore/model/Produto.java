@@ -3,18 +3,18 @@ package org.pcstore.model;
 public class Produto {
     private int id;
     private String nome;
-    private String marcaL;
+    private String marca;
     private Categoria categoria;
-    private double precoL;
+    private double preco;
     private int quantidade_estoque;
     private Fornecedor fornecedor;
 
-    public Produto(int id, String nome, String marcaL, Categoria categoria, double precoL, int quantidade_estoque, Fornecedor fornecedor) {
+    public Produto(int id, String nome, String marca, Categoria categoria, double preco, int quantidade_estoque, Fornecedor fornecedor) {
         this.id = id;
         this.nome = nome;
-        this.marcaL = marcaL;
+        this.marca = marca;
         this.categoria = categoria;
-        this.precoL = precoL;
+        this.preco = preco;
         this.quantidade_estoque = quantidade_estoque;
         this.fornecedor = fornecedor;
     }
@@ -35,12 +35,12 @@ public class Produto {
         this.nome = nome;
     }
 
-    public String getMarcaL() {
-        return marcaL;
+    public String getMarca() {
+        return marca;
     }
 
-    public void setMarcaL(String marcaL) {
-        this.marcaL = marcaL;
+    public void setMarcaL(String marca) {
+        this.marca = marca;
     }
 
     public Categoria getCategoria() {
@@ -51,12 +51,12 @@ public class Produto {
         this.categoria = categoria;
     }
 
-    public double getPrecoL() {
-        return precoL;
+    public double getPreco() {
+        return preco;
     }
 
-    public void setPrecoL(double precoL) {
-        this.precoL = precoL;
+    public void setPreco(double preco) {
+        this.preco = preco;
     }
 
     public int getQuantidade_estoque() {
