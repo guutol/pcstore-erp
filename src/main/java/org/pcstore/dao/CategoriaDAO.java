@@ -30,7 +30,7 @@ public class CategoriaDAO {
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, categoria.getNome());
             pst.setInt(2, id);
-            pst.execute();
+            pst.executeUpdate();
             System.out.println("Categoria alterado com sucesso!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -41,7 +41,7 @@ public class CategoriaDAO {
             String sql = "DELETE FROM categorias WHERE id=?";
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1, id);
-            pst.execute();
+            pst.executeUpdate();
             System.out.println("Categoria excluída com sucesso!");
         } catch (Exception e) {
             e.printStackTrace();

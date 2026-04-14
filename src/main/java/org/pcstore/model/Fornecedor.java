@@ -7,6 +7,8 @@ public class Fornecedor {
     private String telefone;
     private String email;
 
+    public Fornecedor(){}
+
     public Fornecedor(int id, String nome, String cnpj, String telefone, String email) {        this.id = id;
         this.nome = nome;
         this.cnpj = cnpj;

@@ -9,6 +9,8 @@ public class Produto {
     private int quantidade_estoque;
     private Fornecedor fornecedor;
 
+    public Produto(){}
+
     public Produto(int id, String nome, String marca, Categoria categoria, double preco, int quantidade_estoque, Fornecedor fornecedor) {
         this.id = id;
         this.nome = nome;
@@ -39,7 +41,7 @@ public class Produto {
         return marca;
     }
 
-    public void setMarcaL(String marca) {
+    public void setMarca(String marca) {
         this.marca = marca;
     }
 
