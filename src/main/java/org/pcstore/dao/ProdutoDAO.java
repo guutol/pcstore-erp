@@ -8,6 +8,7 @@ import org.pcstore.model.Produto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,15 +18,18 @@ public class ProdutoDAO {
 
     public void incluir(Produto produto) {
         try (Connection conn = Conexao.getConnection()){
-            String sql = "INSERT INTO produtos (nome, marca, categoria_id, preco, quantidade_estoque, fornecedor_id VALUES (?, ?, ?, ?, ?, ?);";
-            PreparedStatement pst = conn.prepareStatement(sql);
+            String sql = "INSERT INTO produtos (nome, marca, categoria_id, preco, quantidade_estoque, fornecedor_id) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, produto.getNome());
             pst.setString(2, produto.getMarca());
             pst.setInt(3, produto.getCategoria().getId());
             pst.setDouble(4, produto.getPreco());
             pst.setInt(5, produto.getQuantidade_estoque());
             pst.setInt(6, produto.getFornecedor().getId());
-            pst.execute();
+            pst.executeUpdate();
+            ResultSet rs = pst.getGeneratedKeys();
+            if(rs.next())
+                produto.setId(rs.getInt(1));
             System.out.println("Produto inserido com sucesso!");
         } catch (Exception e) {
             e.printStackTrace();

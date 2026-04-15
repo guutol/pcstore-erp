@@ -4,10 +4,7 @@ import org.pcstore.db.Conexao;
 import org.pcstore.model.Categoria;
 import org.pcstore.model.Fornecedor;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLOutput;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,13 +15,16 @@ public class FornecedorDAO {
     public void incluir(Fornecedor fornecedor){
         try (Connection conn = Conexao.getConnection()){
             String sql = "INSERT INTO fornecedores (nome, cnpj, telefone, email) VALUES (?, ?, ?, ?)";
-            PreparedStatement pst = conn.prepareStatement(sql);
+            PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, fornecedor.getNome());
             pst.setString(2, fornecedor.getCnpj());
             pst.setString(3, fornecedor.getTelefone());
             pst.setString(4, fornecedor.getEmail());
-            pst.execute();
+            pst.executeUpdate();
             System.out.println("Fornecedor inserido com sucesso!");
+            ResultSet rs = pst.getGeneratedKeys();
+            if(rs.next())
+                fornecedor.setId(rs.getInt(1));
         } catch (Exception e) {
             e.printStackTrace();
         }

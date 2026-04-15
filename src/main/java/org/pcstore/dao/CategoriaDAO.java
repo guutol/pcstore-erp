@@ -3,9 +3,11 @@ package org.pcstore.dao;
 import org.pcstore.db.Conexao;
 import org.pcstore.model.Categoria;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +18,13 @@ public class CategoriaDAO {
     public void incluir(Categoria categoria){
         try (Connection conn = Conexao.getConnection()){
             String sql = "INSERT INTO categorias (nome) VALUES (?);";
-            PreparedStatement pst = conn.prepareStatement(sql);
+            PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, categoria.getNome());
             pst.execute();
             System.out.println("Categoria inserida com sucesso!");
+            ResultSet rs = pst.getGeneratedKeys();
+            if(rs.next())
+                categoria.setId(rs.getInt(1));
         } catch (Exception e) {
             e.printStackTrace();
         }
