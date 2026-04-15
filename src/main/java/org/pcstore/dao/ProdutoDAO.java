@@ -30,7 +30,6 @@ public class ProdutoDAO {
             ResultSet rs = pst.getGeneratedKeys();
             if(rs.next())
                 produto.setId(rs.getInt(1));
-            System.out.println("Produto inserido com sucesso!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,7 +47,6 @@ public class ProdutoDAO {
             pst.setInt(6, produto.getFornecedor().getId());
             pst.setInt(7, id);
             pst.executeUpdate();
-            System.out.println("Categoria alterado com sucesso!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,7 +58,6 @@ public class ProdutoDAO {
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1, id);
             pst.executeUpdate();
-            System.out.println("Produto excluído com sucesso!");
         } catch (Exception e) {
             e.printStackTrace();
         }

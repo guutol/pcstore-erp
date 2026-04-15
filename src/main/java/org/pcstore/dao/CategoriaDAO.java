@@ -21,7 +21,6 @@ public class CategoriaDAO {
             PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, categoria.getNome());
             pst.execute();
-            System.out.println("Categoria inserida com sucesso!");
             ResultSet rs = pst.getGeneratedKeys();
             if(rs.next())
                 categoria.setId(rs.getInt(1));
@@ -36,7 +35,6 @@ public class CategoriaDAO {
             pst.setString(1, categoria.getNome());
             pst.setInt(2, id);
             pst.executeUpdate();
-            System.out.println("Categoria alterado com sucesso!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,7 +45,6 @@ public class CategoriaDAO {
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1, id);
             pst.executeUpdate();
-            System.out.println("Categoria excluída com sucesso!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -57,10 +54,10 @@ public class CategoriaDAO {
         try (Connection conn = Conexao.getConnection()){
             String sql = "SELECT id, nome FROM categorias";
             PreparedStatement pst = conn.prepareStatement(sql);
-            ResultSet result = pst.executeQuery();
-            while(result.next()) {
-                int id = result.getInt("id");
-                String nome = result.getString("nome");
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()) {
+                int id = rs.getInt("id");
+                String nome = rs.getString("nome");
 
                 Categoria categoria = new Categoria();
                 categoria.setId(id);
@@ -79,15 +76,33 @@ public class CategoriaDAO {
             String sql = "SELECT id, nome FROM categorias WHERE id=?";
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1, id);
-            ResultSet result = pst.executeQuery();
-            if(result.next()) {
-                int idDb = result.getInt("id");
-                String nome = result.getString("nome");
+            ResultSet rs = pst.executeQuery();
+            if(rs.next()) {
+                int idDb = rs.getInt("id");
+                String nome = rs.getString("nome");
 
                 categoria = new Categoria();
                 categoria.setId(idDb);
                 categoria.setNome(nome);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return categoria;
+    }
+
+    public Categoria consultar(String nome) {
+        Categoria categoria = null;
+        try (Connection conn = Conexao.getConnection()) {
+            String sql = "SELECT id, nome FROM categorias WHERE nome=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, nome);
+            ResultSet rs = pst.executeQuery();
+            if(rs.next()) {
+                categoria = new Categoria();
+                categoria.setId(rs.getInt("id"));
+                categoria.setNome(rs.getString("nome"));
             }
         } catch (Exception e) {
             e.printStackTrace();

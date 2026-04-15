@@ -21,7 +21,6 @@ public class FornecedorDAO {
             pst.setString(3, fornecedor.getTelefone());
             pst.setString(4, fornecedor.getEmail());
             pst.executeUpdate();
-            System.out.println("Fornecedor inserido com sucesso!");
             ResultSet rs = pst.getGeneratedKeys();
             if(rs.next())
                 fornecedor.setId(rs.getInt(1));
@@ -35,7 +34,6 @@ public class FornecedorDAO {
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, fornecedor.getNome());
             pst.executeUpdate();
-            System.out.println("Fornecedor alterado com sucesso!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,7 +44,6 @@ public class FornecedorDAO {
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1, id);
             pst.executeUpdate();
-            System.out.println("Fornecedor excluído com sucesso!");
         } catch (Exception e) {
             e.printStackTrace();
         }

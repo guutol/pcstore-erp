@@ -3,22 +3,25 @@ package org.pcstore.view;
 import org.pcstore.dao.CategoriaDAO;
 import org.pcstore.dao.FornecedorDAO;
 import org.pcstore.dao.ProdutoDAO;
+import org.pcstore.model.Categoria;
+import org.pcstore.service.CategoriaService;
+import org.pcstore.service.FornecedorService;
+import org.pcstore.service.ProdutoService;
 
 import java.util.Scanner;
 
 public class Menu {
-    private ProdutoDAO produtoDAO;
-    private FornecedorDAO fornecedorDAO;
-    private CategoriaDAO categoriaDAO;
+    private ProdutoService produtoService;
+    private FornecedorService fornecedorService;
+    private CategoriaService categoriaService;
     private Scanner scanner = new Scanner(System.in);
 
-    public Menu() {}
-
-    public Menu(ProdutoDAO produtoDAO, FornecedorDAO fornecedorDAO, CategoriaDAO categoriaDAO) {
-        this.produtoDAO = produtoDAO;
-        this.fornecedorDAO = fornecedorDAO;
-        this.categoriaDAO = categoriaDAO;
+    public Menu() {
+        this.produtoService = new ProdutoService();
+        this.fornecedorService = new FornecedorService();
+        this.categoriaService = new CategoriaService();
     }
+
 
     public void menu() {
         String opcao;
@@ -60,6 +63,7 @@ public class Menu {
 
         do {
             System.out.println(" ");
+            System.out.println("Produto");
             System.out.println("[A] Cadastro");
             System.out.println("[B] Alteração");
             System.out.println("[C] Exclusão");
@@ -96,6 +100,7 @@ public class Menu {
 
         do {
             System.out.println(" ");
+            System.out.println("Fornecedor");
             System.out.println("[A] Cadastro");
             System.out.println("[B] Alteração");
             System.out.println("[C] Exclusão");
@@ -132,6 +137,7 @@ public class Menu {
 
         do {
             System.out.println(" ");
+            System.out.println("Categoria");
             System.out.println("[A] Cadastro");
             System.out.println("[B] Alteração");
             System.out.println("[C] Exclusão");
@@ -143,6 +149,15 @@ public class Menu {
                 case "A":
                     System.out.println(" ");
                     System.out.println("Cadastro de categoria");
+                    System.out.print("Digite o nome da categoria que deseja cadastrar: ");
+                    String resposta = scanner.nextLine();
+                    boolean cadastrou = categoriaService.cadastrarCategoria(resposta);
+                    System.out.println(" ");
+                    if(cadastrou) {
+                        System.out.println("Categoria cadastrada com sucesso");
+                    } else {
+                        System.out.println("Categoria existente");
+                    }
                     break;
                 case "B":
                     System.out.println(" ");
@@ -166,4 +181,6 @@ public class Menu {
     public void menuEstoque() {
 
     }
+
+
 }
