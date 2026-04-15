@@ -28,6 +28,7 @@ public class Menu {
             System.out.println("[A] Sessão de Produtos");
             System.out.println("[B] Sessão de Fornecedores");
             System.out.println("[C] Sessão de Categorias");
+            System.out.println("[D] Adicionar ao Estoque");
             System.out.println("[F] Sair");
 
             opcao = scanner.nextLine().toUpperCase();
@@ -41,6 +42,9 @@ public class Menu {
                     break;
                 case "C":
                     menuCategorias();
+                    break;
+                case "D":
+                    menuEstoque();
                     break;
                 case "F":
                     System.out.println("Encerrando programa...");
@@ -157,5 +161,9 @@ public class Menu {
                     System.out.println("Opção inválida");
             }
         } while (!opcao.equals("F"));
+    }
+
+    public void menuEstoque() {
+
     }
 }
