@@ -133,7 +133,7 @@ public class Menu {
     }
 
     public void menuCategorias() {
-        String opcao;
+        String opcao, resposta;
 
         do {
             System.out.println(" ");
@@ -150,7 +150,7 @@ public class Menu {
                     System.out.println(" ");
                     System.out.println("Cadastro de categoria");
                     System.out.print("Digite o nome da categoria que deseja cadastrar: ");
-                    String resposta = scanner.nextLine();
+                    resposta = scanner.nextLine();
                     boolean cadastrou = categoriaService.cadastrarCategoria(resposta);
                     System.out.println(" ");
                     if(cadastrou) {
@@ -160,8 +160,25 @@ public class Menu {
                     }
                     break;
                 case "B":
+                    CategoriaDAO cDAO = new CategoriaDAO();
+                    Categoria categoriaAntiga = new Categoria();
+                    Categoria categoriaNova = new Categoria();
                     System.out.println(" ");
                     System.out.println("Alteração de categoria");
+                    System.out.print("Digite o id da categoria que deseja alterar: ");
+                    resposta = scanner.nextLine();
+                    categoriaAntiga = cDAO.buscar(Integer.parseInt(resposta));
+                    if(categoriaAntiga != null) {
+                        System.out.println("Informações da categoria: ");
+                        System.out.println("Id: " + categoriaAntiga.getId() + " Nome: " + categoriaAntiga.getNome());
+                        System.out.print("Digite o novo nome: ");
+                        resposta = scanner.nextLine();
+                        categoriaNova.setNome(resposta);
+                        categoriaService.alterarCategoria(categoriaAntiga.getId(), categoriaNova);
+                        System.out.println("Categoria alterada com sucesso");
+                    } else {
+                        System.out.println("Categoria não encontrada");
+                    }
                     break;
                 case "C":
                     System.out.println(" ");

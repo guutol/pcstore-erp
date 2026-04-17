@@ -22,4 +22,8 @@ public class CategoriaService {
             return false;
         }
     }
+
+    public void alterarCategoria(int id, Categoria categoriaNova) {
+        cDAO.alterar(id, categoriaNova);
+    }
 }
