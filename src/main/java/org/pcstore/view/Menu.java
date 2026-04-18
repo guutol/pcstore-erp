@@ -8,6 +8,9 @@ import org.pcstore.service.CategoriaService;
 import org.pcstore.service.FornecedorService;
 import org.pcstore.service.ProdutoService;
 
+import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
@@ -134,13 +137,14 @@ public class Menu {
 
     public void menuCategorias() {
         String opcao, resposta;
-
+        CategoriaDAO cDAO = new CategoriaDAO();
         do {
             System.out.println(" ");
             System.out.println("Categoria");
             System.out.println("[A] Cadastro");
             System.out.println("[B] Alteração");
             System.out.println("[C] Exclusão");
+            System.out.println("[D] Listar");
             System.out.println("[F] Sair");
 
             opcao = scanner.nextLine().toUpperCase();
@@ -160,7 +164,6 @@ public class Menu {
                     }
                     break;
                 case "B":
-                    CategoriaDAO cDAO = new CategoriaDAO();
                     Categoria categoriaAntiga = new Categoria();
                     Categoria categoriaNova = new Categoria();
                     System.out.println(" ");
@@ -184,8 +187,45 @@ public class Menu {
                     }
                     break;
                 case "C":
+                    Categoria categoria = new Categoria();
+
                     System.out.println(" ");
                     System.out.println("Exclusão de categoria");
+                    System.out.print("Digite o id da categoria que deseja excluir: ");
+                    System.out.println(" ");
+                    resposta = scanner.nextLine();
+                    categoria = cDAO.buscar(Integer.parseInt(resposta));
+                    if(categoria != null) {
+                        System.out.println(" ");
+                        System.out.println("Informações da categoria: ");
+                        System.out.println("Id: " + categoria.getId() + " Nome: " + categoria.getNome());
+                        System.out.println("Confirmar exclusão? (S/N)");
+                        resposta = scanner.nextLine();
+                        System.out.println(" ");
+                        if(resposta.equalsIgnoreCase("s")) {
+                            categoriaService.excluirCategoria(categoria.getId());
+                            System.out.println("Categoria excluída com sucesso");
+                        } else if (resposta.equalsIgnoreCase("n")) {
+                            System.out.println("Exclusão cancelada com sucesso");
+                        } else {
+                            System.out.println("Opção inválida");
+                        }
+                    } else {
+                        System.out.println(" ");
+                        System.out.println("Categoria não encontrada");
+                    }
+                    break;
+                case "D":
+                    List<Categoria> categoriaList = new ArrayList<>();
+                    System.out.println(" ");
+                    System.out.println("Listar categorias");
+                    categoriaList = cDAO.listar();
+                    for(Categoria c : categoriaList) {
+                        System.out.println("Id: " + c.getId() + " Nome: " + c.getNome() + " ,");
+                    }
+                    System.out.println(" ");
+                    System.out.println("Pressione ENTER para continuar...");
+                    scanner.nextLine();
                     break;
                 case "F":
                     System.out.println(" ");

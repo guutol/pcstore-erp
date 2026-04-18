@@ -26,4 +26,8 @@ public class CategoriaService {
     public void alterarCategoria(int id, Categoria categoriaNova) {
         cDAO.alterar(id, categoriaNova);
     }
+
+    public void excluirCategoria(int id) {
+        cDAO.excluir(id);
+    }
 }
