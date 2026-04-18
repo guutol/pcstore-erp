@@ -166,9 +166,11 @@ public class Menu {
                     System.out.println(" ");
                     System.out.println("Alteração de categoria");
                     System.out.print("Digite o id da categoria que deseja alterar: ");
+                    System.out.println(" ");
                     resposta = scanner.nextLine();
                     categoriaAntiga = cDAO.buscar(Integer.parseInt(resposta));
                     if(categoriaAntiga != null) {
+                        System.out.println(" ");
                         System.out.println("Informações da categoria: ");
                         System.out.println("Id: " + categoriaAntiga.getId() + " Nome: " + categoriaAntiga.getNome());
                         System.out.print("Digite o novo nome: ");
@@ -177,6 +179,7 @@ public class Menu {
                         categoriaService.alterarCategoria(categoriaAntiga.getId(), categoriaNova);
                         System.out.println("Categoria alterada com sucesso");
                     } else {
+                        System.out.println(" ");
                         System.out.println("Categoria não encontrada");
                     }
                     break;
