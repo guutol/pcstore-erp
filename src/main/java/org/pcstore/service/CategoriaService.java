@@ -2,6 +2,7 @@ package org.pcstore.service;
 
 import org.pcstore.dao.CategoriaDAO;
 import org.pcstore.model.Categoria;
+import org.pcstore.model.Fornecedor;
 
 import java.util.Scanner;
 

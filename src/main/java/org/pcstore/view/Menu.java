@@ -4,6 +4,7 @@ import org.pcstore.dao.CategoriaDAO;
 import org.pcstore.dao.FornecedorDAO;
 import org.pcstore.dao.ProdutoDAO;
 import org.pcstore.model.Categoria;
+import org.pcstore.model.Fornecedor;
 import org.pcstore.service.CategoriaService;
 import org.pcstore.service.FornecedorService;
 import org.pcstore.service.ProdutoService;
@@ -100,8 +101,12 @@ public class Menu {
 
     public void menuFornecedores() {
         String opcao;
-
+        String resposta;
+        List<String> respostas = new ArrayList<>();
+        Fornecedor novoFornecedor = new Fornecedor();
+        FornecedorDAO fDAO = new FornecedorDAO();
         do {
+            respostas = new ArrayList<>();
             System.out.println(" ");
             System.out.println("Fornecedor");
             System.out.println("[A] Cadastro");
@@ -115,14 +120,99 @@ public class Menu {
                 case "A":
                     System.out.println(" ");
                     System.out.println("Cadastro de fornecedor");
+                    System.out.print("Digite o nome do fornecedor que deseja cadastrar: ");
+                    respostas.add(resposta = scanner.nextLine());
+                    System.out.print("Digite o CNPJ do fornecedor que deseja cadastrar: ");
+                    respostas.add(resposta = scanner.nextLine());
+                    System.out.print("Digite o telefone do fornecedor que deseja cadastrar: ");
+                    respostas.add(resposta = scanner.nextLine());
+                    System.out.print("Digite o e-mail do forneceddor que deseja cadastrar: ");
+                    respostas.add(resposta = scanner.nextLine());
+                    novoFornecedor.setNome(respostas.get(0));
+                    novoFornecedor.setCnpj(respostas.get(1));
+                    novoFornecedor.setTelefone(respostas.get(2));
+                    novoFornecedor.setEmail(respostas.get(3));
+                    boolean cadastrou = fornecedorService.cadastrarFornecedor(novoFornecedor);
+                    System.out.println(" ");
+                    if(cadastrou) {
+                        System.out.println("Fornecedor cadastrado com sucesso");
+                    } else {
+                        System.out.println("Fornecedor existente");
+                    }
                     break;
                 case "B":
+                    Fornecedor fornecedorAntigo = new Fornecedor();
+                    Fornecedor fornecedorNovo = new Fornecedor();
                     System.out.println(" ");
                     System.out.println("Alteração de fornecedor");
+                    System.out.print("Digite o id do fornecedor que deseja alterar: ");
+                    System.out.println(" ");
+                    resposta = scanner.nextLine();
+                    fornecedorAntigo = fDAO.buscar(Integer.parseInt(resposta));
+                    if(fornecedorAntigo != null) {
+                        System.out.println(" ");
+                        System.out.println("Informações do fornecedor: ");
+                        System.out.println("Id: " + fornecedorAntigo.getId() + " Nome: " + fornecedorAntigo.getNome());
+                        System.out.println("CNPJ: " + fornecedorAntigo.getCnpj() + " Telefone: " + fornecedorAntigo.getTelefone() + " Email: " + fornecedorAntigo.getEmail());
+                        System.out.print("Digite o novo nome: ");
+                        respostas.add(resposta = scanner.nextLine());
+                        System.out.print("Digite o novo CNPJ: ");
+                        respostas.add(resposta = scanner.nextLine());
+                        System.out.print("Digite o novo telefone: ");
+                        respostas.add(resposta = scanner.nextLine());
+                        System.out.print("Digite o novo email: ");
+                        respostas.add(resposta = scanner.nextLine());
+                        fornecedorNovo.setNome(respostas.get(0));
+                        fornecedorNovo.setCnpj(respostas.get(1));
+                        fornecedorNovo.setTelefone(respostas.get(2));
+                        fornecedorNovo.setEmail(respostas.get(3));
+                        fornecedorService.alterarFornecedor(fornecedorAntigo.getId(), fornecedorNovo);
+                        System.out.println("Fornecedor alterado com sucesso");
+                    } else {
+                        System.out.println(" ");
+                        System.out.println("Fornecedor não encontrado");
+                    }
                     break;
                 case "C":
+                    Fornecedor fornecedor = new Fornecedor();
                     System.out.println(" ");
                     System.out.println("Exclusão de fornecedor");
+                    System.out.print("Digite o id do fornecedor que deseja excluir: ");
+                    System.out.println(" ");
+                    resposta = scanner.nextLine();
+                    fornecedor = fDAO.buscar(Integer.parseInt(resposta));
+                    if(fornecedor != null) {
+                        System.out.println(" ");
+                        System.out.println("Informações do fornecedor: ");
+                        System.out.println("Id: " + fornecedor.getId() + " Nome: " + fornecedor.getNome());
+                        System.out.println("CNPJ: " + fornecedor.getCnpj() + " Telefone: " + fornecedor.getTelefone() + " Email: " + fornecedor.getEmail());
+                        System.out.println("Confirmar exclusão? (S/N)");
+                        resposta = scanner.nextLine();
+                        System.out.println(" ");
+                        if(resposta.equalsIgnoreCase("s")) {
+                            fornecedorService.excluirFornecedor(fornecedor.getId());
+                            System.out.println("Fornecedor excluído com sucesso");
+                        } else if (resposta.equalsIgnoreCase("n")) {
+                            System.out.println("Exclusão cancelada com sucesso");
+                        } else {
+                            System.out.println("Opção inválida");
+                        }
+                    } else {
+                        System.out.println(" ");
+                        System.out.println("Fornecedor não encontrado");
+                    }
+                    break;
+                case "D":
+                    List<Fornecedor> fornecedorList = new ArrayList<>();
+                    System.out.println(" ");
+                    System.out.println("Listar fornecedor");
+                    fornecedorList = fDAO.listar();
+                    for(Fornecedor f : fornecedorList) {
+                        System.out.println("Id: " + f.getId() + " Nome: " + f.getNome() + " ,");
+                    }
+                    System.out.println(" ");
+                    System.out.println("Pressione ENTER para continuar...");
+                    scanner.nextLine();
                     break;
                 case "F":
                     System.out.println(" ");

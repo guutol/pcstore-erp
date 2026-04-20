@@ -28,11 +28,12 @@ public class FornecedorDAO {
             e.printStackTrace();
         }
     }
-    public void alterar(Fornecedor fornecedor) {
+    public void alterar(int id, Fornecedor fornecedor) {
         try (Connection conn = Conexao.getConnection()){
             String sql = "UPDATE fornecedores SET nome=? WHERE id=?";
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, fornecedor.getNome());
+            pst.setInt(2, id);
             pst.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,6 +85,24 @@ public class FornecedorDAO {
                 fornecedor.setId(idDb);
                 fornecedor.setNome(nome);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return fornecedor;
+    }
+
+    public Fornecedor consultar(String nome) {
+        Fornecedor fornecedor = null;
+        try (Connection conn = Conexao.getConnection()) {
+            String sql = "SELECT id, nome FROM fornecedores WHERE nome=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, nome);
+            ResultSet rs = pst.executeQuery();
+            if(rs.next()) {
+                fornecedor = new Fornecedor();
+                fornecedor.setId(rs.getInt("id"));
+                fornecedor.setNome(rs.getString("nome"));
             }
         } catch (Exception e) {
             e.printStackTrace();
