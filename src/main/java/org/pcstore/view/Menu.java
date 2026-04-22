@@ -112,6 +112,7 @@ public class Menu {
             System.out.println("[A] Cadastro");
             System.out.println("[B] Alteração");
             System.out.println("[C] Exclusão");
+            System.out.println("[D] Listar");
             System.out.println("[F] Sair");
 
             opcao = scanner.nextLine().toUpperCase();
@@ -208,7 +209,8 @@ public class Menu {
                     System.out.println("Listar fornecedor");
                     fornecedorList = fDAO.listar();
                     for(Fornecedor f : fornecedorList) {
-                        System.out.println("Id: " + f.getId() + " Nome: " + f.getNome() + " ,");
+                        System.out.println("Id: " + f.getId() + " Nome: " + f.getNome());
+                        System.out.println("CNPJ: " + f.getCnpj() + " Telefone: " + f.getTelefone() + " Email: " + f.getEmail());
                     }
                     System.out.println(" ");
                     System.out.println("Pressione ENTER para continuar...");
