@@ -5,6 +5,7 @@ import org.pcstore.dao.FornecedorDAO;
 import org.pcstore.dao.ProdutoDAO;
 import org.pcstore.model.Categoria;
 import org.pcstore.model.Fornecedor;
+import org.pcstore.model.Produto;
 import org.pcstore.service.CategoriaService;
 import org.pcstore.service.FornecedorService;
 import org.pcstore.service.ProdutoService;
@@ -63,22 +64,76 @@ public class Menu {
     }
 
     public void menuProdutos() {
-        String opcao;
-
+        String opcao, resposta;
+        List<String> respostas = new ArrayList<>();
         do {
+            respostas = new ArrayList<>();
             System.out.println(" ");
             System.out.println("Produto");
             System.out.println("[A] Cadastro");
             System.out.println("[B] Alteração");
             System.out.println("[C] Exclusão");
+            System.out.println("[D] Listar");
             System.out.println("[F] Sair");
 
             opcao = scanner.nextLine().toUpperCase();
 
             switch (opcao) {
                 case "A":
+                    FornecedorDAO fDAO = new FornecedorDAO();
+                    CategoriaDAO cDAO = new CategoriaDAO();
+                    Produto novoProduto = new Produto();
+                    Categoria categoria = new Categoria();
+                    Fornecedor fornecedor = new Fornecedor();
+
                     System.out.println(" ");
                     System.out.println("Cadastro de produto");
+
+                    System.out.print("Digite o nome do produto que deseja cadastrar: ");
+                    respostas.add(resposta = scanner.nextLine());
+
+                    System.out.print("Digite a marca do produto que deseja cadastrar: ");
+                    respostas.add(resposta = scanner.nextLine());
+
+                    System.out.print("Digite o id da categoria do produto que deseja cadastrar: ");
+                    resposta = scanner.nextLine();
+                    categoria = cDAO.buscar(Integer.parseInt(resposta));
+
+                    if(categoria != null) {
+                        System.out.print("Digite o preço do produto que deseja cadastrar: ");
+                        respostas.add(resposta = scanner.nextLine());
+
+                        System.out.print("Digite a quantidade de estoque do produto que deseja cadastrar: ");
+                        respostas.add(resposta = scanner.nextLine());
+
+                        System.out.print("Digite o id do fornecedor do produto que deseja cadastrar: ");
+                        resposta = scanner.nextLine();
+                        fornecedor = fDAO.buscar(Integer.parseInt(resposta));
+
+                        if(fornecedor != null) {
+                            novoProduto.setNome(respostas.get(0));
+                            novoProduto.setMarca(respostas.get(1));
+                            novoProduto.setCategoria(categoria);
+                            novoProduto.setPreco(Double.parseDouble(respostas.get(2)));
+                            novoProduto.setQuantidade_estoque(Integer.parseInt(respostas.get(3)));
+                            novoProduto.setFornecedor(fornecedor);
+
+                            boolean cadastrou = produtoService.cadastrarProduto(novoProduto);
+
+                            System.out.println(" ");
+                            if(cadastrou) {
+                                System.out.println("Produto cadastrado com sucesso");
+                            } else {
+                                System.out.println("Produto existente");
+                            }
+                        } else {
+                            System.out.println(" ");
+                            System.out.println("Fornecedor não encontrado");
+                        }
+                    } else {
+                        System.out.println(" ");
+                        System.out.println("Categoria não encontrada");
+                    }
                     break;
                 case "B":
                     System.out.println(" ");
@@ -100,8 +155,7 @@ public class Menu {
     }
 
     public void menuFornecedores() {
-        String opcao;
-        String resposta;
+        String opcao, resposta;
         List<String> respostas = new ArrayList<>();
         Fornecedor novoFornecedor = new Fornecedor();
         FornecedorDAO fDAO = new FornecedorDAO();

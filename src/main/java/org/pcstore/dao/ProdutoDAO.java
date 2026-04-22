@@ -5,6 +5,7 @@ import org.pcstore.model.Categoria;
 import org.pcstore.model.Fornecedor;
 import org.pcstore.model.Produto;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -132,6 +133,31 @@ public class ProdutoDAO {
                 produto.setPreco(preco);
                 produto.setQuantidade_estoque(quantidade);
                 produto.setFornecedor(fornecedor);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return produto;
+    }
+
+    public Produto consultar(String nome, String marca) {
+        Produto produto = null;
+        try (Connection conn = Conexao.getConnection()) {
+            String sql = "SELECT id, nome, marca, categoria_id, preco, quantidade_estoque, fornecedor_id FROM produtos WHERE nome=? AND marca=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, nome);
+            pst.setString(2, marca);
+            ResultSet rs = pst.executeQuery();
+
+            if(rs.next()) {
+                produto = new Produto();
+                produto.setId(rs.getInt("id"));
+                produto.setNome(rs.getString("nome"));
+                produto.setMarca(rs.getString("marca"));
+                produto.setCategoria(rs.getInt("categoria_id"));
+                produto.setPreco(rs.getDouble("preco"));
+                produto.setQuantidade_estoque(rs.getInt("quantidade_estoque"));
+                produto.setFornecedor(rs.getInt("fornecedor_id"));
             }
         } catch (Exception e) {
             e.printStackTrace();

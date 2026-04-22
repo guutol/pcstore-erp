@@ -53,6 +53,12 @@ public class Produto {
         this.categoria = categoria;
     }
 
+    public void setCategoria(int id) {
+        Categoria c = new Categoria();
+        c.setId(id);
+        this.categoria = c;
+    }
+
     public double getPreco() {
         return preco;
     }
@@ -75,5 +81,11 @@ public class Produto {
 
     public void setFornecedor(Fornecedor fornecedor) {
         this.fornecedor = fornecedor;
+    }
+
+    public void setFornecedor(int id) {
+        Fornecedor f = new Fornecedor();
+        f.setId(id);
+        this.fornecedor = f;
     }
 }
