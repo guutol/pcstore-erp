@@ -27,9 +27,11 @@ public class ProdutoDAO {
             pst.setInt(5, produto.getQuantidade_estoque());
             pst.setInt(6, produto.getFornecedor().getId());
             pst.executeUpdate();
+
             ResultSet rs = pst.getGeneratedKeys();
-            if(rs.next())
+            if(rs.next()) {
                 produto.setId(rs.getInt(1));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -66,34 +68,18 @@ public class ProdutoDAO {
     public List<Produto> listar() {
         List<Produto> lista = new ArrayList<>();
         try (Connection conn = Conexao.getConnection()) {
-            String sql = "SELECT id, nome, marca, categoria_id, preco, quantidade_estoque, fornecedor_id FROM produtos";
+            String sql = "SELECT p.id, p.nome, p.marca, p.preco, p.quantidade_estoque, " +
+                    "c.id AS categoria_id, c.nome AS categoria_nome, " +
+                    "f.id AS fornecedor_id, f.nome AS fornecedor_nome, f.cnpj, f.telefone, f.email " +
+                    "FROM produtos p " +
+                    "JOIN categorias c ON p.categoria_id = c.id " +
+                    "JOIN fornecedores f ON p.fornecedor_id = f.id " +
+                    "ORDER BY p.id";
             PreparedStatement pst = conn.prepareStatement(sql);
-            ResultSet result = pst.executeQuery();
-            while (result.next()) {
-                int id = result.getInt("id");
-                String nome = result.getString("nome");
-                String marca = result.getString("marca");
-                int categoriaId = result.getInt("categoria_id");
-                double preco = result.getDouble("preco");
-                int quantidade = result.getInt("quantidade_estoque");
-                int fornecedorId = result.getInt("fornecedor_id");
+            ResultSet rs = pst.executeQuery();
 
-                Categoria categoria = new Categoria();
-                categoria.setId(categoriaId);
-
-                Fornecedor fornecedor = new Fornecedor();
-                fornecedor.setId(fornecedorId);
-
-                Produto produto = new Produto();
-                produto.setId(id);
-                produto.setNome(nome);
-                produto.setMarca(marca);
-                produto.setCategoria(categoria);
-                produto.setPreco(preco);
-                produto.setQuantidade_estoque(quantidade);
-                produto.setFornecedor(fornecedor);
-
-                lista.add(produto);
+            while (rs.next()) {
+                lista.add(montarProduto(rs));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,38 +90,71 @@ public class ProdutoDAO {
     public Produto buscar(int id) {
         Produto produto = null;
         try (Connection conn = Conexao.getConnection()) {
-            String sql = "SELECT id, nome, marca, categoria_id, preco, quantidade_estoque, fornecedor_id FROM produtos WHERE id=?";
+            String sql = "SELECT p.id, p.nome, p.marca, p.preco, p.quantidade_estoque, " +
+                    "c.id AS categoria_id, c.nome AS categoria_nome, " +
+                    "f.id AS fornecedor_id, f.nome AS fornecedor_nome, f.cnpj, f.telefone, f.email " +
+                    "FROM produtos p " +
+                    "JOIN categorias c ON p.categoria_id = c.id " +
+                    "JOIN fornecedores f ON p.fornecedor_id = f.id " +
+                    "WHERE p.id=?";
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1, id);
-            ResultSet result = pst.executeQuery();
+            ResultSet rs = pst.executeQuery();
 
-            if (result.next()) {
-                int idDb = result.getInt("id");
-                String nome = result.getString("nome");
-                String marca = result.getString("marca");
-                int categoriaId = result.getInt("categoria_id");
-                double preco = result.getDouble("preco");
-                int quantidade = result.getInt("quantidade_estoque");
-                int fornecedorId = result.getInt("fornecedor_id");
-
-                Categoria categoria = new Categoria();
-                categoria.setId(categoriaId);
-
-                Fornecedor fornecedor = new Fornecedor();
-                fornecedor.setId(fornecedorId);
-
-                produto = new Produto();
-                produto.setId(idDb);
-                produto.setNome(nome);
-                produto.setMarca(marca);
-                produto.setCategoria(categoria);
-                produto.setPreco(preco);
-                produto.setQuantidade_estoque(quantidade);
-                produto.setFornecedor(fornecedor);
+            if (rs.next()) {
+                produto = montarProduto(rs);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return produto;
+    }
+
+    public Produto consultar(String nome, String marca) {
+        Produto produto = null;
+        try (Connection conn = Conexao.getConnection()) {
+            String sql = "SELECT p.id, p.nome, p.marca, p.preco, p.quantidade_estoque, " +
+                    "c.id AS categoria_id, c.nome AS categoria_nome, " +
+                    "f.id AS fornecedor_id, f.nome AS fornecedor_nome, f.cnpj, f.telefone, f.email " +
+                    "FROM produtos p " +
+                    "JOIN categorias c ON p.categoria_id = c.id " +
+                    "JOIN fornecedores f ON p.fornecedor_id = f.id " +
+                    "WHERE p.nome=? AND p.marca=?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, nome);
+            pst.setString(2, marca);
+            ResultSet rs = pst.executeQuery();
+
+            if(rs.next()) {
+                produto = montarProduto(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return produto;
+    }
+
+    private Produto montarProduto(ResultSet rs) throws Exception {
+        Categoria categoria = new Categoria();
+        categoria.setId(rs.getInt("categoria_id"));
+        categoria.setNome(rs.getString("categoria_nome"));
+
+        Fornecedor fornecedor = new Fornecedor();
+        fornecedor.setId(rs.getInt("fornecedor_id"));
+        fornecedor.setNome(rs.getString("fornecedor_nome"));
+        fornecedor.setCnpj(rs.getString("cnpj"));
+        fornecedor.setTelefone(rs.getString("telefone"));
+        fornecedor.setEmail(rs.getString("email"));
+
+        Produto produto = new Produto();
+        produto.setId(rs.getInt("id"));
+        produto.setNome(rs.getString("nome"));
+        produto.setMarca(rs.getString("marca"));
+        produto.setCategoria(categoria);
+        produto.setPreco(rs.getDouble("preco"));
+        produto.setQuantidade_estoque(rs.getInt("quantidade_estoque"));
+        produto.setFornecedor(fornecedor);
+
         return produto;
     }
 }

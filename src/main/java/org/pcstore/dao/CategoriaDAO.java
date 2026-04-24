@@ -28,6 +28,7 @@ public class CategoriaDAO {
             e.printStackTrace();
         }
     }
+
     public void alterar(int id, Categoria categoria) {
         try (Connection conn = Conexao.getConnection()){
             String sql = "UPDATE categorias SET nome=? WHERE id=?";
@@ -49,6 +50,7 @@ public class CategoriaDAO {
             e.printStackTrace();
         }
     }
+
     public List<Categoria> listar(){
         List<Categoria> lista = new ArrayList<>();
         try (Connection conn = Conexao.getConnection()){
@@ -70,6 +72,7 @@ public class CategoriaDAO {
         }
         return lista;
     }
+
     public Categoria buscar(int id){
         Categoria categoria = null;
         try (Connection conn = Conexao.getConnection()){
